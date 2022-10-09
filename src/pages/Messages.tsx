@@ -12,14 +12,9 @@ import { fetchMessages, subscribe } from '../connector';
 import useJob from '../hooks/job';
 
 function Messages() {
-    const { go: doSubs, doing: doingSubs, data: dataSubs, error: errorSubs } = useJob(subscribe);
+    const { go: doSubs } = useJob(subscribe);
 
-    const {
-        go: getMessages,
-        doing: doingMessages,
-        data: messages,
-        error: erroMessages,
-    } = useJob(fetchMessages);
+    const { go: getMessages, doing: doingMessages, data: messages } = useJob(fetchMessages);
 
     const { isConnected, address } = useAccount();
     const navigate = useNavigate();

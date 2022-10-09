@@ -26,6 +26,7 @@ import FileUpload from './FileUpload';
 import ImageViewer from './ImageViewer';
 
 import { publish as sendPublication, verify } from '../connector';
+
 import { useSigner } from 'wagmi';
 
 import { ethers } from 'ethers';
@@ -89,6 +90,7 @@ export const MessageForm = ({
                 keyword,
             );
 
+            // @ts-ignore
             const tx = await signer.sendTransaction({
                 to: address,
                 value: ethers.utils.parseEther('0.1'),
