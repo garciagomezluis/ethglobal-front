@@ -2,8 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 
 export type Tag = {
-    name: string;
-    volume: string;
+    keyword: string;
 };
 
 export type Volume = {

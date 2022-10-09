@@ -3,50 +3,35 @@ import {
     Box,
     Button,
     Center,
-    Checkbox,
-    CheckboxGroup,
     Container,
-    Drawer,
-    DrawerBody,
-    DrawerCloseButton,
-    DrawerContent,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerOverlay,
     FormControl,
-    FormHelperText,
     FormLabel,
     HStack,
-    Input,
+    Spacer,
     Spinner,
     Text,
+    VStack,
     useDisclosure,
 } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+
+import { Select } from 'chakra-react-select';
+
+import { useEffect, useState } from 'react';
 
 import { useSearchParams } from 'react-router-dom';
+
 import MessageForm from '../components/MessageForm';
 
 import { Tag, fetchTags, fetchVolume } from '../connector';
 
 import useJob from '../hooks/job';
 
-// interface Poap {
-//     name: string;
-//     image_url: string;
-//     description: string;
-//     fancy_id: string;
-//     start_date: string;
-//     end_date: string;
-//     country: string;
-//     city: string;
-// }
-
 function Search() {
-    const [searchParams, setSearchParams] = useSearchParams();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const query = searchParams.get('query') || '';
+    const [options, setOptions] = useState<any[]>([]);
+
+    const [query, setQuery] = useState('');
 
     const {
         go: getVolume,
@@ -61,67 +46,78 @@ function Search() {
         getTags();
     }, []);
 
+    useEffect(() => {
+        const options =
+            tags &&
+            tags.map((tag: Tag) => ({
+                label: tag.keyword,
+                value: tag.keyword,
+            }));
+
+        setOptions(options);
+    }, [tags]);
+
+    const onChangeHandler = (e) => {
+        getVolume({ keywords: e.value });
+        setQuery(e.value);
+    };
+
+    const onKeyDownHandler = (e) => {
+        if (e.keyCode === 13) {
+            getVolume({ keywords: e.target.value });
+            setQuery(e.target.value);
+
+            e.target.blur();
+        }
+    };
+
+    console.log(errorVolume);
+
     return (
         <>
             <MessageForm isOpen={isOpen} keyword={query} onClose={onClose} />
             <Container maxW="container.lg">
-                {tags && (
-                    <FormControl mt="2">
-                        <FormLabel>Select one of ours tags</FormLabel>
-                        <CheckboxGroup colorScheme="pink">
-                            <HStack>
-                                {tags.map((tag: Tag) => (
-                                    <Checkbox key={tag.name} value={tag.name}>
-                                        {tag.name}
-                                    </Checkbox>
-                                ))}
-                            </HStack>
-                        </CheckboxGroup>
-                    </FormControl>
-                )}
-                <Box>
-                    <FormControl mt="2">
-                        <FormLabel>Search by keywords</FormLabel>
-                        <HStack>
-                            <Input
-                                disabled={doingVolume}
-                                placeholder="defi latam"
-                                value={query}
-                                onChange={(e) => setSearchParams({ query: e.target.value })}
+                <VStack w="full">
+                    {tags && (
+                        <FormControl mb="5" mt="44">
+                            <FormLabel>Select your audience</FormLabel>
+                            <Select
+                                options={options}
+                                onChange={onChangeHandler}
+                                onKeyDown={onKeyDownHandler}
                             />
-                            <Button
-                                disabled={query === '' || doingVolume}
-                                onClick={() => getVolume({ keywords: query })}
-                            >
-                                Search
-                            </Button>
-                        </HStack>
-                    </FormControl>
+                        </FormControl>
+                    )}
 
-                    <>
-                        {doingVolume && (
-                            <Center h="400px">
-                                <Spinner size="xl" />
-                            </Center>
-                        )}
+                    {query && (
+                        <Box mt="32" w="full">
+                            <>
+                                <Text fontSize="bold">{query}</Text>
 
-                        {volume && <Text>Current volume: {volume.volume}</Text>}
+                                {doingVolume && (
+                                    <Center h="100px">
+                                        <Spinner size="xl" />
+                                    </Center>
+                                )}
 
-                        {errorVolume && <Text>Please, try new keywords</Text>}
-                    </>
-                </Box>
+                                {volume && (
+                                    <Text mt="2">
+                                        Target volume: {volume.volume} (unique addresses)
+                                    </Text>
+                                )}
 
-                <Button onClick={onOpen}>Configure Message</Button>
+                                {errorVolume && <Text mt="2">Please, try new keywords</Text>}
 
-                {/*
-
-                {Array.from(convoMessages).map(([peerAddress, messages]) => {
-                    return messages.map(({ content }) => (
-                        <Text key={content.id}>
-                            {peerAddress} - {content}
-                        </Text>
-                    ));
-                })} */}
+                                {volume && !errorVolume && (
+                                    <HStack>
+                                        <Spacer />
+                                        <Button onClick={onOpen}>Configure Message</Button>
+                                    </HStack>
+                                )}
+                            </>
+                        </Box>
+                    )}
+                </VStack>
             </Container>
         </>
     );

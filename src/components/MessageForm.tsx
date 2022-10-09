@@ -1,6 +1,7 @@
 import {
     Box,
     Button,
+    Center,
     Drawer,
     DrawerBody,
     DrawerCloseButton,
@@ -119,15 +120,17 @@ export const MessageForm = ({
 
                         <FormControl isDisabled={loading} mt="5">
                             <FormLabel>Please select an image for your product</FormLabel>
-                            {files.length === 0 ? (
-                                <FileUpload onSelect={setFiles} />
-                            ) : (
-                                <ImageViewer
-                                    disabled={loading}
-                                    file={files[0]}
-                                    remove={() => setFiles([])}
-                                />
-                            )}
+                            <Center>
+                                {files.length === 0 ? (
+                                    <FileUpload onSelect={setFiles} />
+                                ) : (
+                                    <ImageViewer
+                                        disabled={loading}
+                                        file={files[0]}
+                                        remove={() => setFiles([])}
+                                    />
+                                )}
+                            </Center>
                         </FormControl>
 
                         <FormControl mt="5">

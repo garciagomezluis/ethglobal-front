@@ -12,6 +12,7 @@ export const useJob = (job: (...args: any[]) => any) => {
         setDoing(true);
 
         setData(null);
+        setError(null);
 
         let response = null;
 
