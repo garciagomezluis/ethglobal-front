@@ -69,8 +69,6 @@ function Search() {
         }
     };
 
-    console.log(errorVolume);
-
     return (
         <>
             <MessageForm isOpen={isOpen} keyword={query} onClose={onClose} />
