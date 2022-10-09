@@ -1,5 +1,7 @@
 import { CalendarIcon, HamburgerIcon, InfoIcon } from '@chakra-ui/icons';
+
 import {
+    Button,
     HStack,
     IconButton,
     Spacer,
@@ -16,10 +18,17 @@ import ConnectButton from './ConnectButton';
 import { useEffect } from 'react';
 
 import { MFC } from '../utils';
+import { useNavigate } from 'react-router-dom';
+
+import { useAccount } from 'wagmi';
 
 export const Header: MFC = ({ ...props }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const isMobile = useBreakpointValue({ base: true, sm: false });
+
+    const { isConnected } = useAccount();
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         window.addEventListener('resize', onClose, false);
@@ -43,7 +52,16 @@ export const Header: MFC = ({ ...props }) => {
             <Menu isOpen={isOpen} small={isMobile} onClose={onClose}>
                 <MenuSection>
                     <MenuItem>
-                        <ConnectButton />
+                        <HStack>
+                            <Button
+                                disabled={!isConnected}
+                                mx="3"
+                                onClick={() => navigate('/messages')}
+                            >
+                                My messages
+                            </Button>
+                            <ConnectButton />
+                        </HStack>
                     </MenuItem>
                 </MenuSection>
 

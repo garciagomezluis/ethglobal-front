@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {
     Box,
     Button,
@@ -24,7 +25,10 @@ import { useState } from 'react';
 import FileUpload from './FileUpload';
 import ImageViewer from './ImageViewer';
 
-import { publish as sendPublication } from '../connector';
+import { publish as sendPublication, verify } from '../connector';
+import { useSigner } from 'wagmi';
+
+import { ethers } from 'ethers';
 
 export const MessageForm = ({
     onClose,
@@ -42,6 +46,8 @@ export const MessageForm = ({
     const [loading, setLoading] = useState(false);
 
     const toast = useToast();
+
+    const { data: signer } = useSigner();
 
     const publish = async () => {
         if (
@@ -75,7 +81,22 @@ export const MessageForm = ({
         // pushsear a supabase
 
         try {
-            await sendPublication(title, description, fileUrl, link, keyword);
+            const { address, message_id } = await sendPublication(
+                title,
+                description,
+                fileUrl,
+                link,
+                keyword,
+            );
+
+            const tx = await signer.sendTransaction({
+                to: address,
+                value: ethers.utils.parseEther('0.1'),
+            });
+
+            await tx.wait();
+
+            await verify(message_id);
         } catch (error) {
             toast({
                 title: 'Error',
@@ -102,6 +123,7 @@ export const MessageForm = ({
                         <FormControl>
                             <FormLabel>Title</FormLabel>
                             <Input
+                                disabled={loading}
                                 placeholder="Get 10% off on the next Devcon"
                                 type="text"
                                 value={title}
@@ -112,6 +134,7 @@ export const MessageForm = ({
                         <FormControl mt="5">
                             <FormLabel>Description</FormLabel>
                             <Textarea
+                                disabled={loading}
                                 placeholder="With your POAPs, You're elegible to get a discount on the next biggest event!"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
@@ -136,6 +159,7 @@ export const MessageForm = ({
                         <FormControl mt="5">
                             <FormLabel>Link</FormLabel>
                             <Input
+                                disabled={loading}
                                 placeholder="https://campaign.com"
                                 type="text"
                                 value={link}

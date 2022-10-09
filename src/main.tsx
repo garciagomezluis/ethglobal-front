@@ -13,6 +13,8 @@ import ModalProvider from './components/Modal';
 
 import Web3Provider from './context/Web3';
 
+import Message from './pages/Message';
+import Messages from './pages/Messages';
 import Search from './pages/Search';
 
 const Dapp: MFC = () => {
@@ -26,6 +28,8 @@ const Dapp: MFC = () => {
             <Container maxW="container.lg">
                 <Routes>
                     <Route element={<Search />} path="/search" />
+                    <Route element={<Messages />} path="/messages" />
+                    <Route element={<Message />} path="/message/:requestedAddress/:messageId" />
                     <Route element={<Search />} path="*" />
                 </Routes>
             </Container>

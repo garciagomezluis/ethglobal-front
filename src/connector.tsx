@@ -10,6 +10,29 @@ export type Volume = {
     wallets: string[];
 };
 
+export const verify = async (messageId: string) => {
+    const controller = new AbortController();
+
+    const timeoutId = setTimeout(() => controller.abort(), 20000);
+
+    const response = await fetch('https://ethglobal-api.vercel.app/messages/verify', {
+        method: 'POST',
+        body: JSON.stringify({
+            message_id: messageId,
+        }),
+        signal: controller.signal,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    clearTimeout(timeoutId);
+
+    if (response.status !== 200) throw new Error('Failed verifying');
+
+    return response.json();
+};
+
 export const publish = async (
     title: string,
     description: string,
@@ -17,6 +40,10 @@ export const publish = async (
     link: string,
     keyword: string,
 ) => {
+    const controller = new AbortController();
+
+    const timeoutId = setTimeout(() => controller.abort(), 20000);
+
     const response = await fetch('https://ethglobal-api.vercel.app/messages', {
         method: 'POST',
         body: JSON.stringify({
@@ -26,12 +53,23 @@ export const publish = async (
             link,
             keyword,
         }),
+        signal: controller.signal,
         headers: {
             'Content-Type': 'application/json',
         },
     });
 
+    clearTimeout(timeoutId);
+
     if (response.status !== 200) throw new Error('Failed publishing');
+
+    return response.json();
+};
+
+export const fetchMessages = async (address: string): Promise<any> => {
+    const response = await fetch(`https://ethglobal-api.vercel.app/messages?address=${address}`);
+
+    if (response.status !== 200) throw new Error('Failed messages');
 
     return response.json();
 };
@@ -40,6 +78,33 @@ export const fetchTags = async (): Promise<Tag[]> => {
     const response = await fetch('https://ethglobal-api.vercel.app/audiences');
 
     if (response.status !== 200) throw new Error('Failed fetching tags');
+
+    return response.json();
+};
+
+export const watch = async (address: string, messageId: string): Promise<any> => {
+    const response = await fetch(`https://ethglobal-api.vercel.app/messages/watch/`, {
+        method: 'POST',
+        body: JSON.stringify({ address, message_id: messageId }),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    if (response.status !== 200) throw new Error('Failed watching');
+
+    return response.json();
+};
+
+export const subscribe = async (address: string) => {
+    const response = await fetch('https://ethglobal-api.vercel.app/dataunions/subscribe', {
+        method: 'POST',
+        body: JSON.stringify({
+            address,
+        }),
+    });
+
+    if (response.status !== 200) throw new Error('Failed subscribing');
 
     return response.json();
 };

@@ -7,7 +7,6 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    base: '/ethglobal-front/',
     plugins: [react()],
     build: {
         // ↓ Needed for build if using WalletConnect and other providers

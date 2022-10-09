@@ -18,8 +18,6 @@ import { Select } from 'chakra-react-select';
 
 import { useEffect, useState } from 'react';
 
-import { useSearchParams } from 'react-router-dom';
-
 import MessageForm from '../components/MessageForm';
 
 import { Tag, fetchTags, fetchVolume } from '../connector';
