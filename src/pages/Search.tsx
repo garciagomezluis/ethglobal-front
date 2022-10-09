@@ -55,12 +55,12 @@ function Search() {
         setOptions(options);
     }, [tags]);
 
-    const onChangeHandler = (e) => {
+    const onChangeHandler = (e: any) => {
         getVolume({ keywords: e.value });
         setQuery(e.value);
     };
 
-    const onKeyDownHandler = (e) => {
+    const onKeyDownHandler = (e: any) => {
         if (e.keyCode === 13) {
             getVolume({ keywords: e.target.value });
             setQuery(e.target.value);
