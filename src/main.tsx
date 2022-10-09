@@ -13,8 +13,7 @@ import ModalProvider from './components/Modal';
 
 import Web3Provider from './context/Web3';
 
-import Profile from './pages/Profile';
-import Welcome from './pages/Welcome';
+import Search from './pages/Search';
 
 const Dapp: MFC = () => {
     return (
@@ -26,9 +25,8 @@ const Dapp: MFC = () => {
             </Box>
             <Container maxW="container.lg">
                 <Routes>
-                    <Route element={<Welcome />} path="/welcome" />
-                    <Route element={<Profile />} path="/profile/:userAddress" />
-                    <Route element={<Welcome />} path="*" />
+                    <Route element={<Search />} path="/search" />
+                    <Route element={<Search />} path="*" />
                 </Routes>
             </Container>
         </BrowserRouter>

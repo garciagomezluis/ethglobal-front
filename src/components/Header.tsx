@@ -13,7 +13,6 @@ import { Menu, MenuItem, MenuSection } from './Menu';
 import Logo from './Logo';
 
 import ConnectButton from './ConnectButton';
-import ThemeButton from './ThemeButton';
 import { useEffect } from 'react';
 
 import { MFC } from '../utils';
@@ -34,7 +33,6 @@ export const Header: MFC = ({ ...props }) => {
         <HStack {...props}>
             <Logo />
             <Spacer />
-            <ThemeButton />
             {isMobile && (
                 <IconButton
                     aria-label="open menu"

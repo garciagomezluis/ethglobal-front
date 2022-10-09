@@ -4,7 +4,7 @@ import { useState } from 'react';
 export const useJob = (job: (...args: any[]) => any) => {
     const [doing, setDoing] = useState(false);
     const [done, setDone] = useState(false);
-    const [data, setData] = useState(null);
+    const [data, setData] = useState<any>(null);
     const [error, setError] = useState<unknown>();
 
     const go = async (...args: any[]) => {
