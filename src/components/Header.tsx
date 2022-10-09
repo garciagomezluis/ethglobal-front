@@ -53,6 +53,9 @@ export const Header: MFC = ({ ...props }) => {
                 <MenuSection>
                     <MenuItem>
                         <HStack>
+                            <Button disabled={!isConnected} mx="3" onClick={() => {}}>
+                                Withdraw
+                            </Button>
                             <Button
                                 disabled={!isConnected}
                                 mx="3"

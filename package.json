@@ -14,6 +14,7 @@
         "@chakra-ui/icons": "^2.0.10",
         "@chakra-ui/react": "^2.3.4",
         "@chakra-ui/theme-tools": "^2.0.12",
+        "@dataunions/client": "^3.0.5",
         "@emotion/react": "^11.10.4",
         "@emotion/styled": "^11.10.4",
         "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
